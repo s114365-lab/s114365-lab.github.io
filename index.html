@@ -1,144 +1,198 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>羽球遊戲升級版</title>
+<title>VICTOR 羽球互動介紹網站</title>
+
 <style>
-body{
-    margin:0;
-    background:#0b1220;
-    color:white;
-    text-align:center;
-    font-family:Arial;
+body {
+    font-family: Arial, "Microsoft JhengHei";
+    margin: 0;
+    background: #f5f7fb;
 }
-canvas{
-    background:#0f172a;
-    display:block;
-    margin:10px auto;
-    border:2px solid #334155;
+
+header {
+    background: #0b3d91;
+    color: white;
+    text-align: center;
+    padding: 20px;
 }
-#score{
-    font-size:20px;
+
+section {
+    max-width: 950px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+h2 {
+    color: #0b3d91;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin: 15px 0;
+    overflow: hidden;
+    background: #fafafa;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.tag {
+    display: inline-block;
+    background: #0b3d91;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.details {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background: #eaf0ff;
+    border-radius: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    background: #0b3d91;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+button:hover {
+    background: #092c66;
 }
 </style>
 </head>
+
 <body>
 
-<h1>🏸 羽球（升級版）</h1>
-<div id="score">你 0 : 0 電腦</div>
-<canvas id="game" width="600" height="300"></canvas>
+<header>
+<h1>🏸 VICTOR 羽球互動介紹網站</h1>
+<p>點擊卡片查看詳細資訊</p>
+</header>
+
+<section>
+<h2>🔥 羽球型號互動展示</h2>
+
+<!-- 1 -->
+<div class="card" onclick="toggle('d1')">
+    <img src="https://source.unsplash.com/900x500/?badminton,pro" />
+    <div class="card-content">
+        <div class="tag">比賽級 PRO</div>
+        <h3>Master Ace</h3>
+        <p>頂級比賽用球，穩定度最高</p>
+
+        <div id="d1" class="details">
+            ✔ 國際比賽等級<br>
+            ✔ 羽毛排列精密<br>
+            ✔ 飛行最穩定<br>
+            ✔ 適合職業選手
+        </div>
+
+        <button onclick="toggle('d1'); event.stopPropagation();">
+            查看 / 收起詳情
+        </button>
+    </div>
+</div>
+
+<!-- 2 -->
+<div class="card" onclick="toggle('d2')">
+    <img src="https://source.unsplash.com/900x500/?badminton,feather" />
+    <div class="card-content">
+        <div class="tag">高階訓練</div>
+        <h3>Gold Champion</h3>
+        <p>穩定＋耐用的訓練用球</p>
+
+        <div id="d2" class="details">
+            ✔ 校隊常用款<br>
+            ✔ 耐打度高<br>
+            ✔ 飛行穩定<br>
+            ✔ CP值高
+        </div>
+
+        <button onclick="toggle('d2'); event.stopPropagation();">
+            查看 / 收起詳情
+        </button>
+    </div>
+</div>
+
+<!-- 3 -->
+<div class="card" onclick="toggle('d3')">
+    <img src="https://source.unsplash.com/900x500/?badminton,training" />
+    <div class="card-content">
+        <div class="tag">一般訓練</div>
+        <h3>Training Pro</h3>
+        <p>日常練習用球</p>
+
+        <div id="d3" class="details">
+            ✔ 學校社團常用<br>
+            ✔ 價格適中<br>
+            ✔ 穩定性中等<br>
+            ✔ 適合長時間練習
+        </div>
+
+        <button onclick="toggle('d3'); event.stopPropagation();">
+            查看 / 收起詳情
+        </button>
+    </div>
+</div>
+
+<!-- 4 -->
+<div class="card" onclick="toggle('d4')">
+    <img src="https://source.unsplash.com/900x500/?badminton,casual" />
+    <div class="card-content">
+        <div class="tag">入門級</div>
+        <h3>Easy Play</h3>
+        <p>休閒娛樂用球</p>
+
+        <div id="d4" class="details">
+            ✔ 適合初學者<br>
+            ✔ 價格便宜<br>
+            ✔ 耐用普通<br>
+            ✔ 家庭娛樂首選
+        </div>
+
+        <button onclick="toggle('d4'); event.stopPropagation();">
+            查看 / 收起詳情
+        </button>
+    </div>
+</div>
+
+</section>
 
 <script>
-const c=document.getElementById("game");
-const ctx=c.getContext("2d");
-
-let playerY=120;
-let aiY=120;
-
-let ball={
-x:300,
-y:150,
-vx:4,
-vy:-3,
-r:6
-};
-
-let p=0,a=0;
-
-function draw(){
-ctx.clearRect(0,0,600,300);
-
-// 場地
-ctx.fillStyle="#0f172a";
-ctx.fillRect(0,0,600,300);
-
-// 網子
-ctx.fillStyle="white";
-ctx.fillRect(298,0,4,300);
-
-// 球拍
-ctx.fillStyle="white";
-ctx.fillRect(20,playerY,10,60);
-ctx.fillRect(570,aiY,10,60);
-
-// 羽球
-ctx.fillStyle="yellow";
-ctx.beginPath();
-ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
-ctx.fill();
-
-document.getElementById("score").innerText=
-`你 ${p} : ${a} 電腦`;
+function toggle(id) {
+    const el = document.getElementById(id);
+    if (el.style.display === "block") {
+        el.style.display = "none";
+    } else {
+        el.style.display = "block";
+    }
 }
-
-function updateAI(){
-aiY += (ball.y - aiY - 30)*0.08;
-}
-
-function updateBall(){
-
-// 重力（羽球下墜感）
-ball.vy += 0.12;
-
-ball.x += ball.vx;
-ball.y += ball.vy;
-
-// 上下邊界（反彈變弱）
-if(ball.y<0){
-ball.y=0;
-ball.vy*=-0.7;
-}
-if(ball.y>300){
-ball.y=300;
-ball.vy*=-0.7;
-}
-
-// 玩家擊球（根據打到位置改變角度）
-if(ball.x<35 && ball.y>playerY && ball.y<playerY+60){
-ball.vx=Math.abs(ball.vx);
-ball.vy=(ball.y-(playerY+30))*0.25;
-}
-
-// AI擊球
-if(ball.x>565 && ball.y>aiY && ball.y<aiY+60){
-ball.vx=-Math.abs(ball.vx);
-ball.vy=(ball.y-(aiY+30))*0.25;
-}
-
-// 得分
-if(ball.x<0){
-a++;
-reset();
-}
-if(ball.x>600){
-p++;
-reset();
-}
-}
-
-function reset(){
-ball.x=300;
-ball.y=150;
-ball.vx*=-1;
-ball.vy=-3;
-}
-
-document.addEventListener("keydown",e=>{
-if(e.key==="ArrowUp") playerY-=20;
-if(e.key==="ArrowDown") playerY+=20;
-
-if(playerY<0)playerY=0;
-if(playerY>240)playerY=240;
-});
-
-function loop(){
-draw();
-updateAI();
-updateBall();
-requestAnimationFrame(loop);
-}
-
-loop();
 </script>
 
 </body>
