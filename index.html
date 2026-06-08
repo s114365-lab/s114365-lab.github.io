@@ -2,18 +2,17 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>羽球對戰遊戲</title>
+<title>真羽球遊戲</title>
 <style>
 body{
     margin:0;
-    background:#0f172a;
+    background:#0b1220;
     color:white;
     text-align:center;
     font-family:Arial;
 }
-h1{margin-top:10px;}
 canvas{
-    background:#1e293b;
+    background:#0f172a;
     display:block;
     margin:10px auto;
     border:2px solid #334155;
@@ -21,20 +20,13 @@ canvas{
 #score{
     font-size:20px;
 }
-button{
-    padding:8px 16px;
-    margin:5px;
-    cursor:pointer;
-}
 </style>
 </head>
 <body>
 
-<h1>🏸 羽球對戰</h1>
+<h1>🏸 真羽球（簡化版）</h1>
 <div id="score">你 0 : 0 電腦</div>
 <canvas id="game" width="600" height="300"></canvas>
-<br>
-<button onclick="reset()">重新開始</button>
 
 <script>
 const c=document.getElementById("game");
@@ -45,90 +37,90 @@ let aiY=120;
 
 let ball={
 x:300,y:150,
-vx:4,vy:3,
-r:8
+vx:4,vy:-3,
+r:6
 };
 
-let scoreP=0;
-let scoreAI=0;
+let pScore=0;
+let aScore=0;
 
-function drawCourt(){
-ctx.fillStyle="#1e293b";
-ctx.fillRect(0,0,c.width,c.height);
+function draw(){
+ctx.clearRect(0,0,600,300);
 
-ctx.strokeStyle="white";
-ctx.beginPath();
-ctx.moveTo(300,0);
-ctx.lineTo(300,300);
-ctx.stroke();
-}
+// 地面
+ctx.fillStyle="#0f172a";
+ctx.fillRect(0,0,600,300);
 
-function drawRackets(){
+// 網子
+ctx.fillStyle="white";
+ctx.fillRect(298,0,4,300);
+
+// 球拍
 ctx.fillStyle="white";
 ctx.fillRect(20,playerY,10,60);
 ctx.fillRect(570,aiY,10,60);
-}
 
-function drawBall(){
+// 羽球（黃色）
 ctx.fillStyle="yellow";
 ctx.beginPath();
 ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
 ctx.fill();
+
+// 分數
+document.getElementById("score").innerText=
+`你 ${pScore} : ${aScore} 電腦`;
 }
 
 function updateAI(){
-if(aiY+30<ball.y) aiY+=3;
-else aiY-=3;
+aiY += (ball.y - aiY - 30)*0.05;
 }
 
 function updateBall(){
-ball.x+=ball.vx;
-ball.y+=ball.vy;
 
-// 上下牆
-if(ball.y<0||ball.y>300) ball.vy*=-1;
+// 羽球「空氣阻力感」
+ball.vy += 0.15;
+
+ball.x += ball.vx;
+ball.y += ball.vy;
+
+// 上下界
+if(ball.y<0){
+ball.y=0;
+ball.vy*=-0.8;
+}
+if(ball.y>300){
+ball.y=300;
+ball.vy*=-0.8;
+}
 
 // 玩家碰撞
-if(ball.x<30 && ball.y>playerY && ball.y<playerY+60){
-ball.vx*=-1;
-ball.x=30;
+if(ball.x<35 && ball.y>playerY && ball.y<playerY+60){
+ball.vx = Math.abs(ball.vx);
+ball.vy = (ball.y - (playerY+30))*0.2;
 }
 
 // AI碰撞
-if(ball.x>560 && ball.y>aiY && ball.y<aiY+60){
-ball.vx*=-1;
-ball.x=560;
+if(ball.x>565 && ball.y>aiY && ball.y<aiY+60){
+ball.vx = -Math.abs(ball.vx);
+ball.vy = (ball.y - (aiY+30))*0.2;
 }
 
 // 得分
 if(ball.x<0){
-scoreAI++;
-resetBall();
+aScore++;
+reset();
 }
 if(ball.x>600){
-scoreP++;
-resetBall();
+pScore++;
+reset();
+}
 }
 
-document.getElementById("score").innerText=
-`你 ${scoreP} : ${scoreAI} 電腦`;
-}
-
-function resetBall(){
+function reset(){
 ball.x=300;
 ball.y=150;
 ball.vx*=-1;
-ball.vy=3*(Math.random()>0.5?1:-1);
-}
-
-function loop(){
-drawCourt();
-drawRackets();
-drawBall();
-updateAI();
-updateBall();
-
-requestAnimationFrame(loop);
+ball.vy=-3;
 }
 
 document.addEventListener("keydown",e=>{
@@ -139,10 +131,11 @@ if(playerY<0) playerY=0;
 if(playerY>240) playerY=240;
 });
 
-function reset(){
-scoreP=0;
-scoreAI=0;
-resetBall();
+function loop(){
+draw();
+updateAI();
+updateBall();
+requestAnimationFrame(loop);
 }
 
 loop();
