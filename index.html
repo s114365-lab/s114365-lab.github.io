@@ -2,197 +2,158 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>VICTOR 羽球互動介紹網站</title>
-
+<title>麵條逃跑記</title>
 <style>
-body {
-    font-family: Arial, "Microsoft JhengHei";
-    margin: 0;
-    background: #f5f7fb;
+body{
+    margin:0;
+    overflow:hidden;
+    background:#fff8dc;
+    font-family:Arial;
 }
 
-header {
-    background: #0b3d91;
-    color: white;
-    text-align: center;
-    padding: 20px;
+#game{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    background:#ffe4b5;
 }
 
-section {
-    max-width: 950px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
+#player{
+    width:50px;
+    height:50px;
+    position:absolute;
+    left:100px;
+    top:300px;
+    font-size:45px;
 }
 
-h2 {
-    color: #0b3d91;
+.enemy{
+    width:50px;
+    height:50px;
+    position:absolute;
+    font-size:40px;
 }
 
-.card {
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    margin: 15px 0;
-    overflow: hidden;
-    background: #fafafa;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: scale(1.01);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-.card-content {
-    padding: 15px;
-}
-
-.tag {
-    display: inline-block;
-    background: #0b3d91;
-    color: white;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    margin-bottom: 8px;
-}
-
-.details {
-    display: none;
-    margin-top: 10px;
-    padding: 10px;
-    background: #eaf0ff;
-    border-radius: 10px;
-}
-
-button {
-    margin-top: 10px;
-    padding: 8px 12px;
-    border: none;
-    background: #0b3d91;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-}
-button:hover {
-    background: #092c66;
+#score{
+    position:absolute;
+    top:20px;
+    left:20px;
+    font-size:30px;
+    font-weight:bold;
 }
 </style>
 </head>
-
 <body>
 
-<header>
-<h1>🏸 VICTOR 羽球互動介紹網站</h1>
-<p>點擊卡片查看詳細資訊</p>
-</header>
-
-<section>
-<h2>🔥 羽球型號互動展示</h2>
-
-<!-- 1 -->
-<div class="card" onclick="toggle('d1')">
-    <img src="https://source.unsplash.com/900x500/?badminton,pro" />
-    <div class="card-content">
-        <div class="tag">比賽級 PRO</div>
-        <h3>Master Ace</h3>
-        <p>頂級比賽用球，穩定度最高</p>
-
-        <div id="d1" class="details">
-            ✔ 國際比賽等級<br>
-            ✔ 羽毛排列精密<br>
-            ✔ 飛行最穩定<br>
-            ✔ 適合職業選手
-        </div>
-
-        <button onclick="toggle('d1'); event.stopPropagation();">
-            查看 / 收起詳情
-        </button>
-    </div>
+<div id="game">
+    <div id="score">分數：0</div>
+    <div id="player">🍜</div>
 </div>
-
-<!-- 2 -->
-<div class="card" onclick="toggle('d2')">
-    <img src="https://source.unsplash.com/900x500/?badminton,feather" />
-    <div class="card-content">
-        <div class="tag">高階訓練</div>
-        <h3>Gold Champion</h3>
-        <p>穩定＋耐用的訓練用球</p>
-
-        <div id="d2" class="details">
-            ✔ 校隊常用款<br>
-            ✔ 耐打度高<br>
-            ✔ 飛行穩定<br>
-            ✔ CP值高
-        </div>
-
-        <button onclick="toggle('d2'); event.stopPropagation();">
-            查看 / 收起詳情
-        </button>
-    </div>
-</div>
-
-<!-- 3 -->
-<div class="card" onclick="toggle('d3')">
-    <img src="https://source.unsplash.com/900x500/?badminton,training" />
-    <div class="card-content">
-        <div class="tag">一般訓練</div>
-        <h3>Training Pro</h3>
-        <p>日常練習用球</p>
-
-        <div id="d3" class="details">
-            ✔ 學校社團常用<br>
-            ✔ 價格適中<br>
-            ✔ 穩定性中等<br>
-            ✔ 適合長時間練習
-        </div>
-
-        <button onclick="toggle('d3'); event.stopPropagation();">
-            查看 / 收起詳情
-        </button>
-    </div>
-</div>
-
-<!-- 4 -->
-<div class="card" onclick="toggle('d4')">
-    <img src="https://source.unsplash.com/900x500/?badminton,casual" />
-    <div class="card-content">
-        <div class="tag">入門級</div>
-        <h3>Easy Play</h3>
-        <p>休閒娛樂用球</p>
-
-        <div id="d4" class="details">
-            ✔ 適合初學者<br>
-            ✔ 價格便宜<br>
-            ✔ 耐用普通<br>
-            ✔ 家庭娛樂首選
-        </div>
-
-        <button onclick="toggle('d4'); event.stopPropagation();">
-            查看 / 收起詳情
-        </button>
-    </div>
-</div>
-
-</section>
 
 <script>
-function toggle(id) {
-    const el = document.getElementById(id);
-    if (el.style.display === "block") {
-        el.style.display = "none";
-    } else {
-        el.style.display = "block";
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const scoreText = document.getElementById("score");
+
+let x = 100;
+let y = 300;
+let vy = 0;
+let score = 0;
+let gameOver = false;
+
+const keys = {};
+
+document.addEventListener("keydown", e=>{
+    keys[e.key] = true;
+
+    if(e.key === "ArrowUp" && y >= 300){
+        vy = -15;
     }
+});
+
+document.addEventListener("keyup", e=>{
+    keys[e.key] = false;
+});
+
+function createEnemy(){
+    const enemy = document.createElement("div");
+    enemy.className = "enemy";
+
+    const types = ["🥢","🍴","🍲"];
+    enemy.textContent =
+        types[Math.floor(Math.random()*types.length)];
+
+    enemy.style.left = window.innerWidth + "px";
+    enemy.style.top = "300px";
+
+    game.appendChild(enemy);
+
+    let ex = window.innerWidth;
+
+    const move = setInterval(()=>{
+        if(gameOver){
+            clearInterval(move);
+            return;
+        }
+
+        ex -= 6;
+        enemy.style.left = ex + "px";
+
+        const px = x;
+        const py = y;
+
+        if(
+            ex < px + 40 &&
+            ex + 40 > px &&
+            py > 250
+        ){
+            gameOver = true;
+            alert("遊戲結束！分數：" + score);
+            location.reload();
+        }
+
+        if(ex < -50){
+            clearInterval(move);
+            enemy.remove();
+            score++;
+            scoreText.innerText =
+                "分數：" + score;
+        }
+    },20);
 }
+
+setInterval(()=>{
+    if(!gameOver){
+        createEnemy();
+    }
+},1500);
+
+function update(){
+    if(gameOver) return;
+
+    if(keys["ArrowLeft"]){
+        x -= 7;
+    }
+
+    if(keys["ArrowRight"]){
+        x += 7;
+    }
+
+    vy += 0.8;
+    y += vy;
+
+    if(y > 300){
+        y = 300;
+        vy = 0;
+    }
+
+    player.style.left = x + "px";
+    player.style.top = y + "px";
+
+    requestAnimationFrame(update);
+}
+
+update();
 </script>
 
 </body>
