@@ -1,160 +1,102 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<title>麵條逃跑記</title>
-<style>
-body{
-    margin:0;
-    overflow:hidden;
-    background:#fff8dc;
-    font-family:Arial;
-}
-
-#game{
-    width:100vw;
-    height:100vh;
-    position:relative;
-    background:#ffe4b5;
-}
-
-#player{
-    width:50px;
-    height:50px;
-    position:absolute;
-    left:100px;
-    top:300px;
-    font-size:45px;
-}
-
-.enemy{
-    width:50px;
-    height:50px;
-    position:absolute;
-    font-size:40px;
-}
-
-#score{
-    position:absolute;
-    top:20px;
-    left:20px;
-    font-size:30px;
-    font-weight:bold;
-}
-</style>
-</head>
-<body>
-
-<div id="game">
-    <div id="score">分數：0</div>
-    <div id="player">🍜</div>
-</div>
-
-<script>
-const game = document.getElementById("game");
-const player = document.getElementById("player");
-const scoreText = document.getElementById("score");
-
-let x = 100;
-let y = 300;
-let vy = 0;
-let score = 0;
-let gameOver = false;
-
-const keys = {};
-
-document.addEventListener("keydown", e=>{
-    keys[e.key] = true;
-
-    if(e.key === "ArrowUp" && y >= 300){
-        vy = -15;
-    }
-});
-
-document.addEventListener("keyup", e=>{
-    keys[e.key] = false;
-});
-
-function createEnemy(){
-    const enemy = document.createElement("div");
-    enemy.className = "enemy";
-
-    const types = ["🥢","🍴","🍲"];
-    enemy.textContent =
-        types[Math.floor(Math.random()*types.length)];
-
-    enemy.style.left = window.innerWidth + "px";
-    enemy.style.top = "300px";
-
-    game.appendChild(enemy);
-
-    let ex = window.innerWidth;
-
-    const move = setInterval(()=>{
-        if(gameOver){
-            clearInterval(move);
-            return;
-        }
-
-        ex -= 6;
-        enemy.style.left = ex + "px";
-
-        const px = x;
-        const py = y;
-
-        if(
-            ex < px + 40 &&
-            ex + 40 > px &&
-            py > 250
-        ){
-            gameOver = true;
-            alert("遊戲結束！分數：" + score);
-            location.reload();
-        }
-
-        if(ex < -50){
-            clearInterval(move);
-            enemy.remove();
-            score++;
-            scoreText.innerText =
-                "分數：" + score;
-        }
-    },20);
-}
-
-setInterval(()=>{
-    if(!gameOver){
-        createEnemy();
-    }
-},1500);
-
-function update(){
-    if(gameOver) return;
-
-    if(keys["ArrowLeft"]){
-        x -= 7;
-    }
-
-    if(keys["ArrowRight"]){
-        x += 7;
-    }
-
-    vy += 0.8;
-    y += vy;
-
-    if(y > 300){
-        y = 300;
-        vy = 0;
-    }
-
-    player.style.left = x + "px";
-    player.style.top = y + "px";
-
-    requestAnimationFrame(update);
-}
-
-update();
-</script>
-
-</body>
-</html>
+const dogs = {
+  golden: {
+    name: "🐕 黃金獵犬",
+    text: "熱情、友善，喜歡交朋友。",
+    image: "https://source.unsplash.com/400x400/?golden-retriever"
+  },
+  shiba: {
+    name: "🐕 柴犬",
+    text: "獨立、有自己的想法。",
+    image: "https://source.unsplash.com/400x400/?shiba-inu"
+  },
+  border: {
+    name: "🐕 邊境牧羊犬",
+    text: "聰明、喜歡挑戰。",
+    image: "https://source.unsplash.com/400x400/?border-collie"
+  },
+  corgi: {
+    name: "🐕 柯基",
+    text: "活潑可愛，是大家的開心果。",
+    image: "https://source.unsplash.com/400x400/?corgi"
+  },
+  husky: {
+    name: "🐕 哈士奇",
+    text: "愛冒險，充滿創意。",
+    image: "https://source.unsplash.com/400x400/?husky"
+  },
+  labrador: {
+    name: "🐕 拉布拉多",
+    text: "可靠、溫柔、值得信任。",
+    image: "https://source.unsplash.com/400x400/?labrador"
+  },
+  pomeranian: {
+    name: "🐕 博美",
+    text: "自信又可愛。",
+    image: "https://source.unsplash.com/400x400/?pomeranian"
+  },
+  samoyed: {
+    name: "🐕 薩摩耶",
+    text: "樂觀開朗，喜歡帶給別人快樂。",
+    image: "https://source.unsplash.com/400x400/?samoyed"
+  },
+  beagle: {
+    name: "🐕 米格魯",
+    text: "好奇心旺盛，喜歡探索。",
+    image: "https://source.unsplash.com/400x400/?beagle"
+  },
+  poodle: {
+    name: "🐕 貴賓犬",
+    text: "細心、有藝術天分。",
+    image: "https://source.unsplash.com/400x400/?poodle"
+  },
+  shepherd: {
+    name: "🐕 德國牧羊犬",
+    text: "勇敢、有領導力。",
+    image: "https://source.unsplash.com/400x400/?german-shepherd"
+  },
+  chihuahua: {
+    name: "🐕 吉娃娃",
+    text: "小小身體，大大勇氣。",
+    image: "https://source.unsplash.com/400x400/?chihuahua"
+  },
+  dalmatian: {
+    name: "🐕 大麥町",
+    text: "充滿活力和創意。",
+    image: "https://source.unsplash.com/400x400/?dalmatian"
+  },
+  akita: {
+    name: "🐕 秋田犬",
+    text: "忠誠又沉穩。",
+    image: "https://source.unsplash.com/400x400/?akita-dog"
+  },
+  basset: {
+    name: "🐕 巴吉度獵犬",
+    text: "悠閒、隨和。",
+    image: "https://source.unsplash.com/400x400/?basset-hound"
+  },
+  jack: {
+    name: "🐕 傑克羅素㹴",
+    text: "精力充沛，勇於冒險。",
+    image: "https://source.unsplash.com/400x400/?jack-russell-terrier"
+  },
+  aussie: {
+    name: "🐕 澳洲牧羊犬",
+    text: "愛學習，行動力強。",
+    image: "https://source.unsplash.com/400x400/?australian-shepherd"
+  },
+  french: {
+    name: "🐕 法國鬥牛犬",
+    text: "幽默又喜歡陪伴別人。",
+    image: "https://source.unsplash.com/400x400/?french-bulldog"
+  },
+  shihTzu: {
+    name: "🐕 西施犬",
+    text: "溫柔、善解人意。",
+    image: "https://source.unsplash.com/400x400/?shih-tzu"
+  },
+  saint: {
+    name: "🐕 聖伯納犬",
+    text: "可靠，給人滿滿安全感。",
+    image: "https://source.unsplash.com/400x400/?saint-bernard"
+  }
+};
