@@ -1,102 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐶 狗狗性格測驗</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(#fff7e6,#ffe4b5);
+    margin:0;
+    padding:20px;
+}
+
+.card{
+    max-width:800px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+h1{
+    text-align:center;
+}
+
+.question{
+    margin:30px 0;
+}
+
+label{
+    display:block;
+    margin:10px 0;
+    cursor:pointer;
+}
+
+button{
+    background:#ff9f43;
+    color:white;
+    border:none;
+    padding:15px 30px;
+    border-radius:30px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+#result{
+    display:none;
+    margin-top:30px;
+    text-align:center;
+    padding:20px;
+    background:#fff7e6;
+    border-radius:20px;
+}
+
+.dog{
+    font-size:80px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h1>🐶 你是哪種狗狗？</h1>
+
+    <div class="question">
+        <h3>1. 假日你最喜歡？</h3>
+        <label><input type="radio" name="q1" value="golden"> 和朋友出去玩 🎉</label>
+        <label><input type="radio" name="q1" value="shiba"> 在家休息 😴</label>
+        <label><input type="radio" name="q1" value="husky"> 去冒險 🚀</label>
+        <label><input type="radio" name="q1" value="corgi"> 運動或散步 🏃</label>
+    </div>
+
+    <div class="question">
+        <h3>2. 朋友覺得你是？</h3>
+        <label><input type="radio" name="q2" value="golden"> 很貼心 💖</label>
+        <label><input type="radio" name="q2" value="border"> 很聰明 🧠</label>
+        <label><input type="radio" name="q2" value="corgi"> 很搞笑 😂</label>
+        <label><input type="radio" name="q2" value="shiba"> 很有個性 😎</label>
+    </div>
+
+    <div class="question">
+        <h3>3. 遇到新挑戰時？</h3>
+        <label><input type="radio" name="q3" value="border"> 先思考方法 🤔</label>
+        <label><input type="radio" name="q3" value="husky"> 直接衝！⚡</label>
+        <label><input type="radio" name="q3" value="golden"> 找朋友一起 🤝</label>
+        <label><input type="radio" name="q3" value="shiba"> 自己慢慢解決 🌙</label>
+    </div>
+
+    <button onclick="showResult()">查看結果</button>
+
+    <div id="result">
+        <div class="dog">🐶</div>
+        <h2 id="dogName"></h2>
+        <p id="dogText"></p>
+        <button onclick="location.reload()">再測一次</button>
+    </div>
+</div>
+
+<script>
 const dogs = {
-  golden: {
-    name: "🐕 黃金獵犬",
-    text: "熱情、友善，喜歡交朋友。",
-    image: "https://source.unsplash.com/400x400/?golden-retriever"
-  },
-  shiba: {
-    name: "🐕 柴犬",
-    text: "獨立、有自己的想法。",
-    image: "https://source.unsplash.com/400x400/?shiba-inu"
-  },
-  border: {
-    name: "🐕 邊境牧羊犬",
-    text: "聰明、喜歡挑戰。",
-    image: "https://source.unsplash.com/400x400/?border-collie"
-  },
-  corgi: {
-    name: "🐕 柯基",
-    text: "活潑可愛，是大家的開心果。",
-    image: "https://source.unsplash.com/400x400/?corgi"
-  },
-  husky: {
-    name: "🐕 哈士奇",
-    text: "愛冒險，充滿創意。",
-    image: "https://source.unsplash.com/400x400/?husky"
-  },
-  labrador: {
-    name: "🐕 拉布拉多",
-    text: "可靠、溫柔、值得信任。",
-    image: "https://source.unsplash.com/400x400/?labrador"
-  },
-  pomeranian: {
-    name: "🐕 博美",
-    text: "自信又可愛。",
-    image: "https://source.unsplash.com/400x400/?pomeranian"
-  },
-  samoyed: {
-    name: "🐕 薩摩耶",
-    text: "樂觀開朗，喜歡帶給別人快樂。",
-    image: "https://source.unsplash.com/400x400/?samoyed"
-  },
-  beagle: {
-    name: "🐕 米格魯",
-    text: "好奇心旺盛，喜歡探索。",
-    image: "https://source.unsplash.com/400x400/?beagle"
-  },
-  poodle: {
-    name: "🐕 貴賓犬",
-    text: "細心、有藝術天分。",
-    image: "https://source.unsplash.com/400x400/?poodle"
-  },
-  shepherd: {
-    name: "🐕 德國牧羊犬",
-    text: "勇敢、有領導力。",
-    image: "https://source.unsplash.com/400x400/?german-shepherd"
-  },
-  chihuahua: {
-    name: "🐕 吉娃娃",
-    text: "小小身體，大大勇氣。",
-    image: "https://source.unsplash.com/400x400/?chihuahua"
-  },
-  dalmatian: {
-    name: "🐕 大麥町",
-    text: "充滿活力和創意。",
-    image: "https://source.unsplash.com/400x400/?dalmatian"
-  },
-  akita: {
-    name: "🐕 秋田犬",
-    text: "忠誠又沉穩。",
-    image: "https://source.unsplash.com/400x400/?akita-dog"
-  },
-  basset: {
-    name: "🐕 巴吉度獵犬",
-    text: "悠閒、隨和。",
-    image: "https://source.unsplash.com/400x400/?basset-hound"
-  },
-  jack: {
-    name: "🐕 傑克羅素㹴",
-    text: "精力充沛，勇於冒險。",
-    image: "https://source.unsplash.com/400x400/?jack-russell-terrier"
-  },
-  aussie: {
-    name: "🐕 澳洲牧羊犬",
-    text: "愛學習，行動力強。",
-    image: "https://source.unsplash.com/400x400/?australian-shepherd"
-  },
-  french: {
-    name: "🐕 法國鬥牛犬",
-    text: "幽默又喜歡陪伴別人。",
-    image: "https://source.unsplash.com/400x400/?french-bulldog"
-  },
-  shihTzu: {
-    name: "🐕 西施犬",
-    text: "溫柔、善解人意。",
-    image: "https://source.unsplash.com/400x400/?shih-tzu"
-  },
-  saint: {
-    name: "🐕 聖伯納犬",
-    text: "可靠，給人滿滿安全感。",
-    image: "https://source.unsplash.com/400x400/?saint-bernard"
-  }
+    golden:{
+        name:"🐕 黃金獵犬",
+        text:"你熱情友善，很喜歡交朋友！"
+    },
+    shiba:{
+        name:"🐕 柴犬",
+        text:"你獨立、有個性，喜歡自己的步調。"
+    },
+    husky:{
+        name:"🐕 哈士奇",
+        text:"你喜歡冒險，總有天馬行空的想法。"
+    },
+    corgi:{
+        name:"🐕 柯基",
+        text:"你活潑可愛，是大家的開心果！"
+    },
+    border:{
+        name:"🐕 邊境牧羊犬",
+        text:"你聰明、有創意，喜歡接受挑戰。"
+    }
 };
+
+function showResult(){
+    const score = {
+        golden:0,
+        shiba:0,
+        husky:0,
+        corgi:0,
+        border:0
+    };
+
+    for(let i=1;i<=3;i++){
+        const ans = document.querySelector(
+            'input[name="q'+i+'"]:checked'
+        );
+
+        if(!ans){
+            alert("請先回答所有問題！");
+            return;
+        }
+
+        score[ans.value]++;
+    }
+
+    const result = Object.keys(score).reduce((a,b)=>
+        score[a] > score[b] ? a : b
+    );
+
+    document.getElementById("dogName").innerText =
+        dogs[result].name;
+
+    document.getElementById("dogText").innerText =
+        dogs[result].text;
+
+    document.getElementById("result").style.display =
+        "block";
+}
+</script>
+
+</body>
+</html>
