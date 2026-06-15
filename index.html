@@ -7,156 +7,271 @@
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background: linear-gradient(#fff7e6,#ffe4b5);
-    margin:0;
-    padding:20px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#fff8e7,#ffe0b2);
+  margin:0;
+  padding:20px;
 }
 
-.card{
-    max-width:800px;
-    margin:auto;
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+.container{
+  max-width:800px;
+  margin:auto;
+  background:white;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.15);
 }
 
 h1{
-    text-align:center;
+  text-align:center;
 }
 
 .question{
-    margin:30px 0;
+  margin-bottom:30px;
+}
+
+.question h3{
+  margin-bottom:10px;
 }
 
 label{
-    display:block;
-    margin:10px 0;
-    cursor:pointer;
+  display:block;
+  margin:8px 0;
+  cursor:pointer;
+  padding:8px;
+  border-radius:10px;
+}
+
+label:hover{
+  background:#fff3e0;
 }
 
 button{
-    background:#ff9f43;
-    color:white;
-    border:none;
-    padding:15px 30px;
-    border-radius:30px;
-    font-size:18px;
-    cursor:pointer;
+  display:block;
+  margin:30px auto;
+  padding:15px 35px;
+  font-size:18px;
+  border:none;
+  border-radius:30px;
+  background:#ff9800;
+  color:white;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#f57c00;
 }
 
 #result{
-    display:none;
-    margin-top:30px;
-    text-align:center;
-    padding:20px;
-    background:#fff7e6;
-    border-radius:20px;
+  display:none;
+  text-align:center;
+  background:#fff8e7;
+  padding:25px;
+  border-radius:20px;
+  margin-top:30px;
 }
 
 .dog{
-    font-size:80px;
+  font-size:90px;
+}
+
+.progress{
+  width:100%;
+  background:#eee;
+  height:20px;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:15px;
+}
+
+.bar{
+  height:100%;
+  background:#ff9800;
 }
 </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>🐶 你是哪種狗狗？</h1>
+<div class="container">
+<h1>🐶 你是哪種狗狗？</h1>
 
-    <div class="question">
-        <h3>1. 假日你最喜歡？</h3>
-        <label><input type="radio" name="q1" value="golden"> 和朋友出去玩 🎉</label>
-        <label><input type="radio" name="q1" value="shiba"> 在家休息 😴</label>
-        <label><input type="radio" name="q1" value="husky"> 去冒險 🚀</label>
-        <label><input type="radio" name="q1" value="corgi"> 運動或散步 🏃</label>
-    </div>
+<div id="quiz"></div>
 
-    <div class="question">
-        <h3>2. 朋友覺得你是？</h3>
-        <label><input type="radio" name="q2" value="golden"> 很貼心 💖</label>
-        <label><input type="radio" name="q2" value="border"> 很聰明 🧠</label>
-        <label><input type="radio" name="q2" value="corgi"> 很搞笑 😂</label>
-        <label><input type="radio" name="q2" value="shiba"> 很有個性 😎</label>
-    </div>
+<button onclick="showResult()">查看結果</button>
 
-    <div class="question">
-        <h3>3. 遇到新挑戰時？</h3>
-        <label><input type="radio" name="q3" value="border"> 先思考方法 🤔</label>
-        <label><input type="radio" name="q3" value="husky"> 直接衝！⚡</label>
-        <label><input type="radio" name="q3" value="golden"> 找朋友一起 🤝</label>
-        <label><input type="radio" name="q3" value="shiba"> 自己慢慢解決 🌙</label>
-    </div>
+<div id="result">
+  <div class="dog">🐶</div>
+  <h2 id="dogName"></h2>
+  <p id="dogText"></p>
 
-    <button onclick="showResult()">查看結果</button>
+  <h3>相似度</h3>
+  <div class="progress">
+    <div id="bar" class="bar"></div>
+  </div>
+  <p id="percent"></p>
 
-    <div id="result">
-        <div class="dog">🐶</div>
-        <h2 id="dogName"></h2>
-        <p id="dogText"></p>
-        <button onclick="location.reload()">再測一次</button>
-    </div>
+  <button onclick="location.reload()">再測一次</button>
+</div>
+
 </div>
 
 <script>
 const dogs = {
-    golden:{
-        name:"🐕 黃金獵犬",
-        text:"你熱情友善，很喜歡交朋友！"
-    },
-    shiba:{
-        name:"🐕 柴犬",
-        text:"你獨立、有個性，喜歡自己的步調。"
-    },
-    husky:{
-        name:"🐕 哈士奇",
-        text:"你喜歡冒險，總有天馬行空的想法。"
-    },
-    corgi:{
-        name:"🐕 柯基",
-        text:"你活潑可愛，是大家的開心果！"
-    },
-    border:{
-        name:"🐕 邊境牧羊犬",
-        text:"你聰明、有創意，喜歡接受挑戰。"
-    }
+  golden:{name:"🐕 黃金獵犬",text:"你熱情友善，很喜歡交朋友！"},
+  shiba:{name:"🐕 柴犬",text:"你獨立、有個性，做事有自己的步調。"},
+  corgi:{name:"🐕 柯基",text:"你活潑可愛，是大家的開心果！"},
+  husky:{name:"🐕 哈士奇",text:"你喜歡冒險，充滿創意和想像力。"},
+  border:{name:"🐕 邊境牧羊犬",text:"你聰明、有創意，喜歡挑戰自己。"},
+  labrador:{name:"🐕 拉布拉多",text:"你可靠又溫柔，是朋友的依靠。"},
+  pomeranian:{name:"🐕 博美",text:"你自信可愛，喜歡分享自己的想法。"},
+  samoyed:{name:"🐕 薩摩耶",text:"你樂觀開朗，總能帶給別人快樂。"},
+  beagle:{name:"🐕 米格魯",text:"你好奇心旺盛，喜歡探索新事物。"},
+  poodle:{name:"🐕 貴賓犬",text:"你細心認真，富有藝術氣息。"}
 };
 
+const questions = [
+{
+q:"1. 假日你最想做什麼？",
+options:[
+["和朋友出去玩 🎉","golden"],
+["在家休息 😴","shiba"],
+["去冒險 🚀","husky"],
+["學習新東西 📚","border"]
+]},
+{
+q:"2. 遇到陌生人時？",
+options:[
+["馬上聊天 👋","golden"],
+["先觀察 👀","shiba"],
+["很好奇 🤔","beagle"],
+["害羞 🙈","poodle"]
+]},
+{
+q:"3. 朋友最常怎麼形容你？",
+options:[
+["開朗 ☀️","samoyed"],
+["搞笑 😂","corgi"],
+["可靠 💪","labrador"],
+["有創意 🎨","border"]
+]},
+{
+q:"4. 你最喜歡哪種活動？",
+options:[
+["運動 🏃","corgi"],
+["旅行 ✈️","husky"],
+["畫畫 🎨","poodle"],
+["聚會 🎊","golden"]
+]},
+{
+q:"5. 遇到困難時？",
+options:[
+["找朋友幫忙 🤝","golden"],
+["自己解決 🔍","shiba"],
+["立刻行動 ⚡","beagle"],
+["冷靜思考 🧠","border"]
+]},
+{
+q:"6. 你最喜歡的地方？",
+options:[
+["熱鬧城市 🌆","pomeranian"],
+["安靜房間 🌙","shiba"],
+["大自然 🌳","labrador"],
+["任何新地方 🌍","husky"]
+]},
+{
+q:"7. 別人需要幫助時，你會？",
+options:[
+["馬上幫忙 ❤️","golden"],
+["默默支持 🌱","labrador"],
+["想出方法 💡","border"],
+["講笑話安慰 😂","corgi"]
+]},
+{
+q:"8. 如果有一天空閒？",
+options:[
+["出去玩 🎡","samoyed"],
+["睡覺 🛏️","shiba"],
+["研究新東西 🔬","poodle"],
+["探索附近 🧭","beagle"]
+]},
+{
+q:"9. 你最像哪個字？",
+options:[
+["愛 ❤️","golden"],
+["靜 🌙","shiba"],
+["勇 ⚔️","husky"],
+["樂 😄","corgi"]
+]},
+{
+q:"10. 你希望別人記住你的什麼？",
+options:[
+["善良 🥰","golden"],
+["聰明 🧠","border"],
+["可靠 🛡️","labrador"],
+["幽默 😆","corgi"]
+]}
+];
+
+const quiz = document.getElementById("quiz");
+
+questions.forEach((item,i)=>{
+  let html = `<div class="question"><h3>${item.q}</h3>`;
+
+  item.options.forEach(op=>{
+    html += `
+      <label>
+        <input type="radio" name="q${i}" value="${op[1]}">
+        ${op[0]}
+      </label>
+    `;
+  });
+
+  html += `</div>`;
+  quiz.innerHTML += html;
+});
+
 function showResult(){
-    const score = {
-        golden:0,
-        shiba:0,
-        husky:0,
-        corgi:0,
-        border:0
-    };
 
-    for(let i=1;i<=3;i++){
-        const ans = document.querySelector(
-            'input[name="q'+i+'"]:checked'
-        );
+  const score = {};
 
-        if(!ans){
-            alert("請先回答所有問題！");
-            return;
-        }
+  Object.keys(dogs).forEach(d=>{
+    score[d]=0;
+  });
 
-        score[ans.value]++;
+  for(let i=0;i<questions.length;i++){
+    const ans =
+      document.querySelector(`input[name="q${i}"]:checked`);
+
+    if(!ans){
+      alert("請先回答全部題目！");
+      return;
     }
 
-    const result = Object.keys(score).reduce((a,b)=>
-        score[a] > score[b] ? a : b
+    score[ans.value]++;
+  }
+
+  const result =
+    Object.keys(score).reduce((a,b)=>
+      score[a] > score[b] ? a : b
     );
 
-    document.getElementById("dogName").innerText =
-        dogs[result].name;
+  const maxScore = score[result];
+  const percent = Math.round(
+    maxScore / questions.length * 100
+  );
 
-    document.getElementById("dogText").innerText =
-        dogs[result].text;
+  document.getElementById("result").style.display="block";
+  document.getElementById("dogName").innerText =
+    dogs[result].name;
+  document.getElementById("dogText").innerText =
+    dogs[result].text;
+  document.getElementById("percent").innerText =
+    `你和 ${dogs[result].name} 的相似度是 ${percent}%！`;
+  document.getElementById("bar").style.width =
+    percent + "%";
 
-    document.getElementById("result").style.display =
-        "block";
+  document.getElementById("result")
+    .scrollIntoView({behavior:"smooth"});
 }
 </script>
 
