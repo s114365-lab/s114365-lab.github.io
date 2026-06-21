@@ -2,335 +2,351 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🐶 你是哪種狗狗？</title>
-
+<title>你是哪種狗狗人格？</title>
 <style>
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:linear-gradient(135deg,#fff7e6,#ffe0b3);
-    padding:20px;
+  font-family:"Microsoft JhengHei",sans-serif;
+  background:#fff4dd;
+  margin:0;
+  padding:30px;
+  color:#333;
 }
-
 .container{
-    max-width:900px;
-    margin:auto;
-    background:white;
-    border-radius:25px;
-    padding:30px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  max-width:850px;
+  margin:auto;
+  background:white;
+  padding:30px;
+  border-radius:25px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.15);
 }
-
-h1{
-    text-align:center;
-    color:#ff8c42;
-}
-
+h1{text-align:center;color:#d88400;}
+.intro{text-align:center;font-size:18px;}
 .question{
-    margin:40px 0;
-    padding:25px;
-    background:#fffaf3;
-    border:3px solid #ffd59e;
-    border-radius:20px;
+  margin:25px 0;
+  padding:20px;
+  background:#fff8ed;
+  border-radius:18px;
 }
-
-.question h3{
-    margin-top:0;
-    color:#444;
-}
-
 label{
-    display:block;
-    background:white;
-    padding:14px;
-    margin:12px 0;
-    border-radius:15px;
-    cursor:pointer;
-    transition:0.2s;
+  display:block;
+  margin:10px 0;
+  cursor:pointer;
 }
-
-label:hover{
-    background:#fff2dd;
-    transform:scale(1.02);
-}
-
 button{
-    display:block;
-    margin:40px auto;
-    padding:15px 35px;
-    border:none;
-    border-radius:30px;
-    background:#ff9f43;
-    color:white;
-    font-size:18px;
-    cursor:pointer;
+  display:block;
+  margin:30px auto;
+  padding:14px 35px;
+  font-size:18px;
+  border:none;
+  border-radius:30px;
+  background:#f0a12b;
+  color:white;
+  cursor:pointer;
 }
-
-button:hover{
-    background:#ff7f00;
-}
-
+button:hover{background:#d88400;}
 #result{
-    display:none;
-    text-align:center;
-    background:#fff8e8;
-    border-radius:20px;
-    padding:30px;
+  display:none;
+  margin-top:30px;
+  padding:25px;
+  background:#fff0c2;
+  border-radius:20px;
 }
-
-.dog{
-    font-size:90px;
-}
-
-.progress{
-    width:100%;
-    height:25px;
-    background:#eee;
-    border-radius:20px;
-    overflow:hidden;
-    margin-top:20px;
-}
-
-.bar{
-    height:100%;
-    width:0%;
-    background:#ff9f43;
+.rank{
+  background:white;
+  padding:12px;
+  margin:10px 0;
+  border-radius:12px;
 }
 </style>
 </head>
+
 <body>
-
 <div class="container">
-    <h1>🐶 你是哪種狗狗？ 🐾</h1>
+<h1>🐶 你是哪種狗狗人格？</h1>
+<p class="intro">回答 15 題，看看你的個性最像哪一種狗狗！</p>
 
-    <div id="quiz"></div>
+<form id="quizForm">
+  <div id="quiz"></div>
+  <button type="button" onclick="showResult()">看我的狗狗人格</button>
+</form>
 
-    <button onclick="showResult()">查看結果</button>
-
-    <div id="result">
-        <div class="dog">🐶</div>
-        <h2 id="dogName"></h2>
-        <p id="dogText"></p>
-
-        <div class="progress">
-            <div class="bar" id="bar"></div>
-        </div>
-
-        <p id="percent"></p>
-
-        <button onclick="location.reload()">再測一次</button>
-    </div>
+<div id="result"></div>
 </div>
 
 <script>
 const dogs = {
-    golden:{
-        name:"🐕 黃金獵犬",
-        text:"你熱情友善，喜歡交朋友，總能帶給大家溫暖！"
-    },
-    shiba:{
-        name:"🐕 柴犬",
-        text:"你獨立又有個性，喜歡按照自己的步調生活。"
-    },
-    corgi:{
-        name:"🐕 柯基",
-        text:"你活潑又搞笑，是朋友中的開心果！"
-    },
-    husky:{
-        name:"🐕 哈士奇",
-        text:"你愛冒險，腦袋裡總有很多天馬行空的想法。"
-    },
-    border:{
-        name:"🐕 邊境牧羊犬",
-        text:"你聰明有創意，喜歡學習和挑戰新事物。"
-    }
+  "黃金獵犬": {
+    emoji:"🦮",
+    desc:"你熱情、友善，很容易讓人感到安心。你重視陪伴，也常常是朋友之間的溫暖小太陽。",
+    traits:["親切友善","重視朋友","很會照顧別人"],
+    motto:"只要大家開心，我也會開心。"
+  },
+  "柴犬": {
+    emoji:"🐕",
+    desc:"你有自己的想法，不喜歡被勉強。雖然有時看起來有點酷，但其實內心很重感情。",
+    traits:["獨立自主","外冷內熱","有自己的原則"],
+    motto:"我可以自己來，但我也在乎你。"
+  },
+  "邊境牧羊犬": {
+    emoji:"🐕‍🦺",
+    desc:"你聰明、觀察力強，喜歡思考和解決問題。你做事通常很有邏輯，也很適合規劃。",
+    traits:["聰明理性","善於分析","學習能力強"],
+    motto:"先想清楚，再做決定。"
+  },
+  "法國鬥牛犬": {
+    emoji:"🐶",
+    desc:"你喜歡舒服自在的生活，不太喜歡太緊繃。你有自己的幽默感，常常能療癒身邊的人。",
+    traits:["隨和可愛","生活感強","懂得享受"],
+    motto:"人生不用太累，舒服最重要。"
+  },
+  "哈士奇": {
+    emoji:"🐺",
+    desc:"你充滿好奇心，喜歡新鮮感和冒險。你不喜歡被限制，常常有很多突然的想法。",
+    traits:["活力充沛","愛冒險","自由奔放"],
+    motto:"先衝再說，人生就是要有趣！"
+  },
+  "柯基": {
+    emoji:"🐾",
+    desc:"你開朗、幽默，很容易帶動氣氛。你雖然有時看起來輕鬆，但其實很在乎大家的感受。",
+    traits:["搞笑可愛","親和力高","氣氛製造者"],
+    motto:"快樂也是一種能力。"
+  },
+  "拉布拉多": {
+    emoji:"🐕",
+    desc:"你可靠、穩定，是別人遇到事情時會想到的人。你不一定最搶眼，但很值得信任。",
+    traits:["穩重可靠","有責任感","願意幫助別人"],
+    motto:"放心，我會陪你一起處理。"
+  },
+  "德國牧羊犬": {
+    emoji:"🐕‍🦺",
+    desc:"你有責任感，也有領導力。你重視秩序和效率，遇到問題時會想辦法扛起來。",
+    traits:["領導力強","責任感重","保護慾強"],
+    motto:"事情交給我，我會做好。"
+  },
+  "博美": {
+    emoji:"🐩",
+    desc:"你外向、喜歡互動，也很重視自己給人的感覺。你在人群中常常很有存在感。",
+    traits:["社交能力強","活潑亮眼","喜歡被看見"],
+    motto:"我就是要閃閃發光。"
+  },
+  "吉娃娃": {
+    emoji:"🐕",
+    desc:"你自信、勇敢，雖然不一定看起來很強勢，但面對重要的事會很堅定。",
+    traits:["勇敢直接","自我意識強","不輕易退縮"],
+    motto:"我小小的，但我很有態度。"
+  }
 };
 
 const questions = [
 {
-q:"1. 如果你突然變成狗狗，你第一件事會做什麼？",
-options:[
-["🍖 找東西吃","corgi"],
-["😴 繼續睡覺","shiba"],
-["🌍 跑出去冒險","husky"],
-["🐾 找其他狗交朋友","golden"]
-]},
+ q:"1. 朋友臨時約你出去，你會？",
+ a:[
+  ["馬上答應，感覺很好玩",{"黃金獵犬":2,"哈士奇":2,"柯基":1}],
+  ["先看自己有沒有心情",{"柴犬":2,"法國鬥牛犬":1}],
+  ["問清楚行程再決定",{"邊境牧羊犬":2,"德國牧羊犬":1}],
+  ["如果是熟人就可以",{"拉布拉多":2,"博美":1}]
+ ]
+},
 {
-q:"2. 如果有一個神秘按鈕，你會？",
-options:[
-["👀 先研究它","border"],
-["😆 馬上按下去","husky"],
-["🙈 完全不敢按","shiba"],
-["📞 找朋友一起按","golden"]
-]},
+ q:"2. 你在團體中通常是？",
+ a:[
+  ["負責帶氣氛的人",{"柯基":2,"博美":2}],
+  ["照顧大家的人",{"黃金獵犬":2,"拉布拉多":2}],
+  ["默默觀察的人",{"柴犬":2,"邊境牧羊犬":1}],
+  ["負責安排事情的人",{"德國牧羊犬":2,"邊境牧羊犬":2}]
+ ]
+},
 {
-q:"3. 如果你撿到一個寶箱，你會？",
-options:[
-["🔑 立刻打開","husky"],
-["🤔 猜裡面有什麼","border"],
-["👥 找朋友一起開","golden"],
-["🏠 帶回家研究","shiba"]
-]},
+ q:"3. 遇到壓力時，你比較像？",
+ a:[
+  ["找朋友聊一聊",{"黃金獵犬":2,"博美":1}],
+  ["自己消化，不想被打擾",{"柴犬":2,"法國鬥牛犬":1}],
+  ["分析問題，想辦法解決",{"邊境牧羊犬":2,"德國牧羊犬":1}],
+  ["先放空或睡覺",{"法國鬥牛犬":2,"柯基":1}]
+ ]
+},
 {
-q:"4. 如果今天完全沒有作業和考試，你會？",
-options:[
-["🎮 玩遊戲","corgi"],
-["😴 睡到自然醒","shiba"],
-["✈️ 出門玩","husky"],
-["📚 學新東西","border"]
-]},
+ q:"4. 你最喜歡的假日是？",
+ a:[
+  ["跟朋友出去玩",{"黃金獵犬":2,"柯基":2}],
+  ["在家休息看影片",{"法國鬥牛犬":2,"柴犬":1}],
+  ["去沒去過的地方",{"哈士奇":2,"博美":1}],
+  ["把事情整理好",{"邊境牧羊犬":2,"德國牧羊犬":2}]
+ ]
+},
 {
-q:"5. 如果你有超能力，你最想要？",
-options:[
-["🦸 飛行","husky"],
-["⏰ 暫停時間","shiba"],
-["🚪 瞬間移動","corgi"],
-["🧠 讀心術","border"]
-]},
+ q:"5. 別人通常覺得你？",
+ a:[
+  ["很好相處",{"黃金獵犬":2,"拉布拉多":1}],
+  ["有個性",{"柴犬":2,"吉娃娃":2}],
+  ["很聰明",{"邊境牧羊犬":2}],
+  ["很有趣",{"柯基":2,"哈士奇":1}]
+ ]
+},
 {
-q:"6. 如果你進入魔法學校，你最想學？",
-options:[
-["✨ 攻擊魔法","husky"],
-["🌿 治癒魔法","golden"],
-["🐉 召喚魔法","corgi"],
-["🔮 預言魔法","border"]
-]},
+ q:"6. 你做決定時比較重視？",
+ a:[
+  ["大家的感受",{"黃金獵犬":2,"拉布拉多":2}],
+  ["自己的想法",{"柴犬":2,"吉娃娃":1}],
+  ["合理和效率",{"邊境牧羊犬":2,"德國牧羊犬":2}],
+  ["有沒有好玩",{"哈士奇":2,"柯基":1}]
+ ]
+},
 {
-q:"7. 朋友約你去鬼屋，你會？",
-options:[
-["😆 第一個衝進去","husky"],
-["😨 躲在最後面","shiba"],
-["📷 負責拍照","border"],
-["🤝 抓著朋友一起走","golden"]
-]},
+ q:"7. 如果朋友難過，你會？",
+ a:[
+  ["陪他說話",{"黃金獵犬":2,"博美":1}],
+  ["默默陪著他",{"拉布拉多":2,"柴犬":1}],
+  ["幫他分析問題",{"邊境牧羊犬":2,"德國牧羊犬":1}],
+  ["想辦法逗他笑",{"柯基":2,"法國鬥牛犬":1}]
+ ]
+},
 {
-q:"8. 如果中了100萬，你第一件事是？",
-options:[
-["🎁 請大家吃東西","golden"],
-["✈️ 去旅行","husky"],
-["💰 存起來","shiba"],
-["🛍️ 買喜歡的東西","corgi"]
-]},
+ q:"8. 你比較討厭？",
+ a:[
+  ["被冷落",{"博美":2,"黃金獵犬":1}],
+  ["被控制",{"柴犬":2,"哈士奇":2}],
+  ["沒有效率",{"德國牧羊犬":2,"邊境牧羊犬":1}],
+  ["生活太累",{"法國鬥牛犬":2}]
+ ]
+},
 {
-q:"9. 如果你能養一隻神奇生物，你會選？",
-options:[
-["🐉 小龍","husky"],
-["🦄 獨角獸","golden"],
-["🧚 小精靈","corgi"],
-["🐺 狼","shiba"]
-]},
+ q:"9. 你心中的理想生活是？",
+ a:[
+  ["有很多朋友陪伴",{"黃金獵犬":2,"博美":2}],
+  ["自由自在不被管",{"柴犬":2,"哈士奇":2}],
+  ["穩定、有目標",{"拉布拉多":2,"德國牧羊犬":1}],
+  ["輕鬆舒服就好",{"法國鬥牛犬":2,"柯基":1}]
+ ]
+},
 {
-q:"10. 如果明天不用上課，你最想去哪裡？",
-options:[
-["🏖️ 海邊","golden"],
-["🎡 遊樂園","corgi"],
-["🏔️ 山上","husky"],
-["🏠 待在家","shiba"]
-]},
+ q:"10. 面對新環境，你會？",
+ a:[
+  ["主動認識新朋友",{"博美":2,"黃金獵犬":1}],
+  ["先觀察一下",{"柴犬":2,"邊境牧羊犬":1}],
+  ["快速找出規則",{"邊境牧羊犬":2,"德國牧羊犬":1}],
+  ["到處探索",{"哈士奇":2,"柯基":1}]
+ ]
+},
 {
-q:"11. 如果你是一種天氣，你會是？",
-options:[
-["☀️ 大晴天","golden"],
-["🌧️ 小雨","shiba"],
-["❄️ 下雪","border"],
-["🌈 彩虹","corgi"]
-]},
+ q:"11. 你比較像哪一種人？",
+ a:[
+  ["溫暖型",{"黃金獵犬":2,"拉布拉多":2}],
+  ["獨立型",{"柴犬":2,"吉娃娃":1}],
+  ["理性型",{"邊境牧羊犬":2}],
+  ["快樂型",{"柯基":2,"法國鬥牛犬":1}]
+ ]
+},
 {
-q:"12. 如果可以和一種動物聊天，你最想跟誰聊？",
-options:[
-["🐶 狗狗","golden"],
-["🐱 貓咪","shiba"],
-["🐧 企鵝","border"],
-["🐬 海豚","husky"]
-]},
+ q:"12. 如果要完成一件事，你會？",
+ a:[
+  ["找大家一起完成",{"黃金獵犬":2,"博美":1}],
+  ["自己慢慢做",{"柴犬":2,"法國鬥牛犬":1}],
+  ["先列計畫",{"邊境牧羊犬":2,"德國牧羊犬":2}],
+  ["邊做邊想",{"哈士奇":2,"柯基":1}]
+ ]
+},
 {
-q:"13. 如果你是老師，你最想教什麼？",
-options:[
-["🎨 美術","border"],
-["🏃 體育","corgi"],
-["🔬 科學","husky"],
-["🎵 音樂","golden"]
-]},
+ q:"13. 你最吸引人的地方是？",
+ a:[
+  ["親切感",{"黃金獵犬":2,"拉布拉多":1}],
+  ["神秘感",{"柴犬":2}],
+  ["能力感",{"邊境牧羊犬":2,"德國牧羊犬":2}],
+  ["可愛感",{"柯基":2,"博美":1}]
+ ]
+},
 {
-q:"14. 如果有一扇任意門，你第一個想去哪裡？",
-options:[
-["🚀 外太空","husky"],
-["🏰 魔法城堡","corgi"],
-["🌊 海底世界","border"],
-["🦖 恐龍時代","golden"]
-]},
+ q:"14. 你生氣時通常會？",
+ a:[
+  ["直接說出來",{"吉娃娃":2,"德國牧羊犬":1}],
+  ["先冷處理",{"柴犬":2}],
+  ["講道理溝通",{"邊境牧羊犬":2,"拉布拉多":1}],
+  ["過一下就算了",{"法國鬥牛犬":2,"柯基":1}]
+ ]
+},
 {
-q:"15. 如果有一台時光機，你第一個想去哪裡？",
-options:[
-["🦖 恐龍時代","husky"],
-["🏰 中世紀城堡","corgi"],
-["🚀 未來世界","border"],
-["👶 回到小時候的一天","golden"]
-]}
+ q:"15. 用一個詞形容你，你會選？",
+ a:[
+  ["溫暖",{"黃金獵犬":2,"拉布拉多":1}],
+  ["自由",{"哈士奇":2,"柴犬":1}],
+  ["聰明",{"邊境牧羊犬":2}],
+  ["閃亮",{"博美":2,"柯基":1}]
+ ]
+}
 ];
 
-const quiz = document.getElementById("quiz");
+let quizDiv = document.getElementById("quiz");
 
-questions.forEach((item,i)=>{
-    let html = `<div class="question"><h3>${item.q}</h3>`;
+questions.forEach((item,index)=>{
+  let div = document.createElement("div");
+  div.className = "question";
+  div.innerHTML = `<h3>${item.q}</h3>`;
 
-    item.options.forEach(op=>{
-        html += `
-        <label>
-            <input type="radio"
-                   name="q${i}"
-                   value="${op[1]}">
-            ${op[0]}
-        </label>`;
-    });
+  item.a.forEach((ans,i)=>{
+    div.innerHTML += `
+      <label>
+        <input type="radio" name="q${index}" value="${index}-${i}">
+        ${ans[0]}
+      </label>
+    `;
+  });
 
-    html += "</div>";
-    quiz.innerHTML += html;
+  quizDiv.appendChild(div);
 });
 
 function showResult(){
+  let scores = {};
+  for(let dog in dogs){
+    scores[dog] = 0;
+  }
 
-    const score = {
-        golden:0,
-        shiba:0,
-        corgi:0,
-        husky:0,
-        border:0
-    };
-
-    for(let i=0;i<questions.length;i++){
-        const ans =
-        document.querySelector(`input[name="q${i}"]:checked`);
-
-        if(!ans){
-            alert("請先回答所有題目！");
-            return;
-        }
-
-        score[ans.value]++;
+  for(let i=0;i<questions.length;i++){
+    let checked = document.querySelector(`input[name="q${i}"]:checked`);
+    if(!checked){
+      alert("還有題目沒寫完喔！");
+      return;
     }
 
-    const result =
-        Object.keys(score).reduce((a,b)=>
-            score[a] > score[b] ? a : b
-        );
+    let answerIndex = checked.value.split("-")[1];
+    let points = questions[i].a[answerIndex][1];
 
-    const percent =
-        Math.round(score[result] / questions.length * 100);
+    for(let dog in points){
+      scores[dog] += points[dog];
+    }
+  }
 
-    document.getElementById("result").style.display = "block";
-    document.getElementById("dogName").innerText =
-        dogs[result].name;
-    document.getElementById("dogText").innerText =
-        dogs[result].text;
-    document.getElementById("percent").innerText =
-        `你和 ${dogs[result].name} 的相似度：${percent}%`;
-    document.getElementById("bar").style.width =
-        percent + "%";
+  let ranking = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  let topDog = ranking[0][0];
+  let maxScore = ranking[0][1];
+  let top3 = ranking.slice(0,3);
 
-    document.getElementById("result")
-        .scrollIntoView({behavior:"smooth"});
+  let html = `
+    <h2>${dogs[topDog].emoji} 你的狗狗人格是：${topDog}</h2>
+    <p>${dogs[topDog].desc}</p>
+
+    <h3>✨ 你的主要特質</h3>
+    <ul>
+      ${dogs[topDog].traits.map(t=>`<li>${t}</li>`).join("")}
+    </ul>
+
+    <h3>💬 代表名言</h3>
+    <p><b>「${dogs[topDog].motto}」</b></p>
+
+    <h3>🏆 相似度排行榜</h3>
+  `;
+
+  top3.forEach((item,index)=>{
+    let percent = Math.round(item[1] / maxScore * 100);
+    html += `
+      <div class="rank">
+        ${index+1}. ${dogs[item[0]].emoji} ${item[0]}：${percent}%
+      </div>
+    `;
+  });
+
+  document.getElementById("result").style.display = "block";
+  document.getElementById("result").innerHTML = html;
+  window.scrollTo(0, document.body.scrollHeight);
 }
 </script>
 
